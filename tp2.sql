@@ -1,3 +1,10 @@
+/* ----------------------------------------------- */
+/*        TP2 De Base de Données - Création        */
+
+/*                        Guillaume Tremeau        */
+/* ----------------------------------------------- */
+
+
 /* Question 1 */
 
 CREATE TABLE Article(
@@ -134,8 +141,48 @@ WHERE NumClt = 15;
 
 /* Question 9 */
 
-ALTER TABLE Commande MODIFY (NumClt number(10) CONSTRAINT FK_NumClt REFERENCES Client(NumClt) ON DELETE CASCADE);
+ALTER TABLE Commande MODIFY (NumClt number(10) 
+	CONSTRAINT FK_NumClt REFERENCES Client(NumClt) ON DELETE CASCADE);
 
 /* Question 11 */
 
 UPDATE Fournisseur SET NomFour=SUBSTR(NomFour,1,6);
+
+/* Question 12 */
+
+SELECT constraint_name, constraint_type
+FROM USER_CONSTRAINTS WHERE TABLE_NAME = 'COMMANDE';
+
+/* Question 13 */
+
+CREATE VIEW Livraison AS
+SELECT Clt.NomClt, A.Libelle, C.Quantite
+FROM Commande C JOIN Client Clt ON C.NumClt=Clt.NumClt JOIN Article A ON A.NumArt=C.NumArt
+WHERE Clt.NumTel IS NOT NULL;
+
+SELECT * FROM Livraison;
+
+/* Question 14 */
+
+DROP TABLE Fournisseur;
+
+/*	 Résultat : unique/primary keys in table referenced by foreign keys 
+		On essai de supprimer la table alors que les clefs primaires sont référencée dans une
+		autre table (Article ici) */
+
+/* Question 15 */
+
+DELETE FROM Commande;
+SELECT * FROM Commande; /* Résultat : no rows selected */
+
+/* Question 16 */
+
+DROP TABLE Commande;
+SELECT * FROM Commande; /* Résultat : table or view does not exist */
+
+/* Question 17 */
+
+DROP VIEW Livraison;
+DROP TABLE Client;
+DROP TABLE Article;
+DROP TABLE Fournisseur;
